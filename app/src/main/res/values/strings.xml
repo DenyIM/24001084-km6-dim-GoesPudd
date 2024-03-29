@@ -23,4 +23,5 @@
     <string name="hint_phone_number">Phone Number</string>
     <string name="text_phone_number">081212345678</string>
     <string name="text_edit_data">Edit Data</string>
+    <string name="text_hint_notes">Catatan</string>
 </resources>
