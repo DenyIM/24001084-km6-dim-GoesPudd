@@ -16,4 +16,11 @@
     <string name="text_grid_mode">Grid Mode</string>
     <string name="text_list_mode">List Mode</string>
     <string name="text_counter">1</string>
+    <string name="hint_username">Username</string>
+    <string name="text_username">Deny Iqbal Mubarok</string>
+    <string name="hint_email">Email</string>
+    <string name="text_email">denyiqbalmubarok773@gmail.com</string>
+    <string name="hint_phone_number">Phone Number</string>
+    <string name="text_phone_number">081212345678</string>
+    <string name="text_edit_data">Edit Data</string>
 </resources>
