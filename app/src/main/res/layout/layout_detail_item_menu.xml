@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    android:layout_margin="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_banner_image_menu"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            tools:src="@tools:sample/avatars"
+            android:background="@drawable/bg_border_black"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/tv_detail_name_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Food"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="4dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_banner_image_menu"/>
+
+        <TextView
+            android:id="@+id/tv_detail_desc_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Description"
+            android:layout_margin="8dp"
+            android:layout_marginStart="4dp"
+            android:textSize="16sp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_name_menu"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_detail_price_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Price"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_banner_image_menu"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
