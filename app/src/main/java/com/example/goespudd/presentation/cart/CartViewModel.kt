@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 
 class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
     fun getAllCarts() = cartRepository.getUserCartData().asLiveData(Dispatchers.IO)
+
     fun decreaseCart(item: Cart) {
         viewModelScope.launch(Dispatchers.IO) {
             cartRepository.decreaseCart(item).collect()
@@ -27,6 +28,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
             cartRepository.deleteCart(item).collect()
         }
     }
+
     fun setCartNotes(item: Cart) {
         viewModelScope.launch(Dispatchers.IO) {
             cartRepository.setCartNotes(item).collect{

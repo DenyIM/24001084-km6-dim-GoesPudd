@@ -1,26 +1,37 @@
 package com.example.goespudd.presentation.checkout
 
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Window
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.catnip.kokomputer.utils.GenericViewModelFactory
-import com.example.goespudd.R
 import com.example.goespudd.data.datasource.cart.CartDataSource
 import com.example.goespudd.data.datasource.cart.CartDatabaseDataSource
 import com.example.goespudd.data.repository.CartRepository
 import com.example.goespudd.data.repository.CartRepositoryImpl
 import com.example.goespudd.data.source.local.database.AppDatabase
 import com.example.goespudd.databinding.ActivityCheckoutBinding
+import com.example.goespudd.databinding.LayoutAlertDialogCheckoutSuccessBinding
 import com.example.goespudd.presentation.cart.adapter.CartListAdapter
 import com.example.goespudd.presentation.checkout.adapter.PriceListAdapter
+import com.example.goespudd.presentation.main.MainActivity
 import com.example.goespudd.utils.proceedWhen
 import com.example.goespudd.utils.toIndonesianFormat
+
 
 class CheckoutActivity : AppCompatActivity() {
 
     private val binding: ActivityCheckoutBinding by lazy {
         ActivityCheckoutBinding.inflate(layoutInflater)
+    }
+
+    private val dialogBinding: LayoutAlertDialogCheckoutSuccessBinding by lazy {
+        LayoutAlertDialogCheckoutSuccessBinding.inflate(layoutInflater)
     }
 
     private val viewModel: CheckoutViewModel by viewModels {
@@ -45,12 +56,32 @@ class CheckoutActivity : AppCompatActivity() {
         setupList()
         observeData()
         setClickListeners()
+
     }
 
     private fun setClickListeners() {
         binding.ivBack.setOnClickListener {
             onBackPressed()
         }
+        binding.btnCheckout.setOnClickListener{
+            setDialogSuccess()
+        }
+    }
+
+    private fun setDialogSuccess() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBinding.btnGotoHome.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            })
+            viewModel.deleteAllCart()
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun setupList() {
@@ -91,7 +122,7 @@ class CheckoutActivity : AppCompatActivity() {
                 binding.layoutState.root.isVisible = true
                 binding.layoutState.pbLoading.isVisible = false
                 binding.layoutState.tvError.isVisible = true
-                binding.layoutState.tvError.text = getString(R.string.text_cart_is_empty)
+                binding.layoutState.tvError.text = getString(com.example.goespudd.R.string.text_cart_is_empty)
                 data.payload?.let { (_, _, totalPrice) ->
                     binding.tvTotalPrice.text = totalPrice.toIndonesianFormat()
                 }

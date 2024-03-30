@@ -1,7 +1,6 @@
 package com.example.goespudd.presentation.home
 
 import androidx.lifecycle.ViewModel
-import com.example.goespudd.data.datasource.menu.MenuDataSource
 import com.example.goespudd.data.repository.CategoryRepository
 import com.example.goespudd.data.repository.MenuRepository
 
@@ -11,4 +10,6 @@ class HomeViewModel(
 ): ViewModel() {
     fun getMenu() = menuRepository.getMenu()
     fun getCategory() = categoryRepository.getCategory()
+
+    var isUsingGridMode: Boolean = true
 }

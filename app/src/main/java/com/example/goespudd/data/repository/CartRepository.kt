@@ -29,6 +29,8 @@ interface CartRepository {
     fun increaseCart(item: Cart): Flow<ResultWrapper<Boolean>>
     fun setCartNotes(item: Cart): Flow<ResultWrapper<Boolean>>
     fun deleteCart(item: Cart): Flow<ResultWrapper<Boolean>>
+
+    fun deleteAllCart(): Flow<ResultWrapper<Boolean>>
 }
 
 class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepository {
@@ -124,5 +126,12 @@ class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepos
 
     override fun deleteCart(item: Cart): Flow<ResultWrapper<Boolean>> {
         return proceedFlow { cartDataSource.deleteCart(item.toCartEntity()) > 0 }
+    }
+
+    override fun deleteAllCart(): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow {
+            cartDataSource.deleteAll()
+            true
+        }
     }
 }

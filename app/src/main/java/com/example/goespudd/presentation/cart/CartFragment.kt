@@ -73,6 +73,7 @@ class CartFragment : Fragment() {
         setClickListeners()
     }
 
+
     private fun setClickListeners() {
         binding.btnCheckout.setOnClickListener {
             startActivity(Intent(requireContext(), CheckoutActivity::class.java))
@@ -97,6 +98,7 @@ class CartFragment : Fragment() {
                         //set list cart data
                         adapter.submitData(carts)
                         binding.tvTotalPrice.text = totalPrice.toIndonesianFormat()
+                        binding.btnCheckout.isEnabled = carts.isNotEmpty()
                     }
                 },
                 doOnError = {
@@ -114,6 +116,7 @@ class CartFragment : Fragment() {
                     binding.rvCart.isVisible = false
                     result.payload?.let { (carts, totalPrice) ->
                         binding.tvTotalPrice.text = totalPrice.toIndonesianFormat()
+                        binding.btnCheckout.isEnabled = carts.isNotEmpty()
                     }
                 }
             )

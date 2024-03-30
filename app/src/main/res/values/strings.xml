@@ -40,4 +40,7 @@
     <string name="text_e_wallet">E-Wallet</string>
     <string name="shopping_summary">Ringkasan Pembayaran</string>
     <string name="text_cart_is_empty">Keranjang Anda Kosong</string>
+    <string name="text_my_profile">My Profile</string>
+    <string name="text_checkout_success">Pesanan Berhasil</string>
+    <string name="text_goto_home">Kembali ke Home</string>
 </resources>
