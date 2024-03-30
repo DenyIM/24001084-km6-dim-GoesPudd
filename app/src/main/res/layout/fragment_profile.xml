@@ -6,12 +6,22 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/tv_title_toolbar"
+        style="@style/TextAppearance.Material3.TitleMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="2dp"
+        android:text="@string/text_my_profile"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <ImageView
         android:id="@+id/iv_img_user_profile"
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginBottom="24dp"/>
 
     <!-- Name Input -->

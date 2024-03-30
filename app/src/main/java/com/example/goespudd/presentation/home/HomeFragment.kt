@@ -30,8 +30,6 @@ class HomeFragment : Fragment() {
         LayoutHeaderMenuBinding.bind(binding.layoutHeaderMenu.root)
     }
 
-    private var isUsingGridMode: Boolean = true
-
     private val viewModel: HomeViewModel by viewModels {
         val menuDataSource = DummyMenuDataSource()
         val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource)
@@ -60,15 +58,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindCategoryList(viewModel.getCategory())
-        bindMenuList(isUsingGridMode, viewModel.getMenu())
+        bindMenuList(viewModel.isUsingGridMode, viewModel.getMenu())
+        setButtonImage(viewModel.isUsingGridMode)
         setAction()
     }
 
     private fun setAction() {
         headerMenuBinding.ivLogoListMenu.setOnClickListener {
-            isUsingGridMode = !isUsingGridMode
-            setButtonImage(isUsingGridMode)
-            bindMenuList(isUsingGridMode, viewModel.getMenu())
+            viewModel.isUsingGridMode = !viewModel.isUsingGridMode
+            setButtonImage(viewModel.isUsingGridMode)
+            bindMenuList(viewModel.isUsingGridMode, viewModel.getMenu())
         }
     }
 
