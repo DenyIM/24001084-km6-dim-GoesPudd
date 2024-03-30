@@ -1,12 +1,19 @@
 package com.example.goespudd.presentation.detailmenu
 
 import android.os.Bundle
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import com.example.goespudd.data.model.Menu
+import com.example.goespudd.data.repository.CartRepository
+import com.example.goespudd.utils.ResultWrapper
+import kotlinx.coroutines.Dispatchers
 
 class DetailMenuViewModel(
     private val extras: Bundle?,
+    private val cartRepository: CartRepository
 ) : ViewModel() {
 
     val menu = extras?.getParcelable<Menu>(DetailMenuActivity.EXTRA_MENU)
@@ -31,5 +38,12 @@ class DetailMenuViewModel(
             menuCountLiveData.postValue(count)
             priceLiveData.postValue(menu?.price?.times(count) ?: 0.0)
         }
+    }
+
+    fun addToCart(): LiveData<ResultWrapper<Boolean>> {
+        return menu?.let {
+            val quantity = menuCountLiveData.value ?: 0
+            cartRepository.createCart(it, quantity).asLiveData(Dispatchers.IO)
+        } ?: liveData { emit(ResultWrapper.Error(IllegalStateException("Product not found"))) }
     }
 }

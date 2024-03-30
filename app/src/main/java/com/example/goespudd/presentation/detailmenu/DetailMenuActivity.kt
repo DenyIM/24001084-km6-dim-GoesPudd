@@ -1,19 +1,26 @@
 package com.example.goespudd.presentation.detailmenu
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.catnip.kokomputer.utils.GenericViewModelFactory
+import com.example.goespudd.R
+import com.example.goespudd.data.datasource.cart.CartDataSource
+import com.example.goespudd.data.datasource.cart.CartDatabaseDataSource
 import com.example.goespudd.data.model.Menu
+import com.example.goespudd.data.repository.CartRepository
+import com.example.goespudd.data.repository.CartRepositoryImpl
+import com.example.goespudd.data.source.local.database.AppDatabase
 import com.example.goespudd.databinding.ActivityDetailMenuBinding
 import com.example.goespudd.databinding.LayoutBtnOrderMenuBinding
 import com.example.goespudd.databinding.LayoutDetailItemMenuBinding
 import com.example.goespudd.databinding.LayoutDetailLocShopMenuBinding
 import com.example.goespudd.databinding.LayoutDetailOrderMenuBinding
+import com.example.goespudd.utils.proceedWhen
 import com.example.goespudd.utils.toIndonesianFormat
 
 
@@ -39,8 +46,11 @@ class DetailMenuActivity : AppCompatActivity() {
     }
 
     private val viewModel: DetailMenuViewModel by viewModels {
+        val db = AppDatabase.getInstance(this)
+        val ds: CartDataSource = CartDatabaseDataSource(db.cartDao())
+        val rp: CartRepository = CartRepositoryImpl(ds)
         GenericViewModelFactory.create(
-            DetailMenuViewModel(intent?.extras)
+            DetailMenuViewModel(intent?.extras, rp)
         )
     }
 
@@ -62,7 +72,32 @@ class DetailMenuActivity : AppCompatActivity() {
         detailOrderMenu.ivPlus.setOnClickListener {
             viewModel.add()
         }
+        detailBtnOrderMenuBinding.clBtnOrder.setOnClickListener {
+            addProductToCart()
+        }
     }
+
+    private fun addProductToCart() {
+        viewModel.addToCart().observe(this) {
+            it.proceedWhen(
+                doOnSuccess = {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.text_add_to_cart_success), Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                },
+                doOnError = {
+                    Toast.makeText(this, getString(R.string.add_to_cart_failed), Toast.LENGTH_SHORT)
+                        .show()
+                },
+                doOnLoading = {
+                    Toast.makeText(this, getString(R.string.loading), Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+    }
+
     private fun bindMenu(menu: Menu?) {
         menu?.let { item ->
             detailItemMenuBinding.ivBannerImageMenu.load(item.imgUrl) {
@@ -89,6 +124,7 @@ class DetailMenuActivity : AppCompatActivity() {
 
     private fun observeData() {
         viewModel.priceLiveData.observe(this) {
+            detailBtnOrderMenuBinding.clBtnOrder.isEnabled = it != 0.0
             detailBtnOrderMenuBinding.tvOrderPrice.text = it.toIndonesianFormat()
         }
         viewModel.menuCountLiveData.observe(this) {
