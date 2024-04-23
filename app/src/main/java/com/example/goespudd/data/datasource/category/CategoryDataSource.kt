@@ -1,7 +1,8 @@
 package com.example.goespudd.data.datasource.category
 
-import com.example.goespudd.data.model.Category
+import com.example.goespudd.data.source.network.model.category.CategoryResponse
 
 interface CategoryDataSource {
-    fun getCategory(): List<Category>
+    suspend fun getCategory(): CategoryResponse
 }
+

@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
-import com.catnip.kokomputer.utils.GenericViewModelFactory
+import com.example.goespudd.utils.GenericViewModelFactory
 import com.example.goespudd.R
 import com.example.goespudd.data.datasource.cart.CartDataSource
 import com.example.goespudd.data.datasource.cart.CartDatabaseDataSource

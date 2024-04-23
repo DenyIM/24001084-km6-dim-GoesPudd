@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "392596524681",
+    "project_id": "goespudd",
+    "storage_bucket": "goespudd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392596524681:android:dfb3bc057cedf4adeac058",
+        "android_client_info": {
+          "package_name": "com.example.goespudd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-3WBN1qnbp4kgMCMTpuZ9r_mnU48ABO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

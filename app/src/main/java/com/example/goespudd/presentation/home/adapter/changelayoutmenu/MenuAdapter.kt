@@ -12,11 +12,11 @@ import com.example.goespudd.databinding.ItemMenuListBinding
 
 class MenuAdapter(
     private val listener: OnItemClickedListener<Menu>,
-    private val listMode: Int = MODE_GRID
+    private val listMode: Int = MODE_LIST
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
-        const val MODE_LIST = 0
-        const val MODE_GRID = 1
+        const val MODE_LIST = 1
+        const val MODE_GRID = 0
     }
 
     private var asyncDataDiffer = AsyncListDiffer(
