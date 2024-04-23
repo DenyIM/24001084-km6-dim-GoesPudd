@@ -9,7 +9,7 @@ import android.view.Window
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.catnip.kokomputer.utils.GenericViewModelFactory
+import com.example.goespudd.utils.GenericViewModelFactory
 import com.example.goespudd.data.datasource.cart.CartDataSource
 import com.example.goespudd.data.datasource.cart.CartDatabaseDataSource
 import com.example.goespudd.data.repository.CartRepository

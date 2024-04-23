@@ -1,7 +1,7 @@
 package com.example.goespudd.data.datasource.menu
 
-import com.example.goespudd.data.model.Menu
+import com.example.goespudd.data.source.network.model.menu.MenuResponse
 
 interface MenuDataSource {
-    fun getMenu(): List<Menu>
+    suspend fun getMenu(categorySlug: String? = null): MenuResponse
 }

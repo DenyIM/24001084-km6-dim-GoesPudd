@@ -1,4 +1,4 @@
-package com.catnip.kokomputer.utils
+package com.example.goespudd.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
