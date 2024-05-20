@@ -10,8 +10,8 @@ import com.example.goespudd.utils.toIndonesianFormat
 
 class MenuGridItemViewHolder(
     private val binding: ItemMenuGridBinding,
-    private val listener: OnItemClickedListener<Menu>
-): RecyclerView.ViewHolder(binding.root), ViewHolderBinder<Menu> {
+    private val listener: OnItemClickedListener<Menu>,
+) : RecyclerView.ViewHolder(binding.root), ViewHolderBinder<Menu> {
     override fun bind(item: Menu) {
         item.let {
             binding.ivMenuImage.load(it.imgUrl) {

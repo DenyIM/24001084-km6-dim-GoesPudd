@@ -4,17 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
-import com.example.goespudd.utils.GenericViewModelFactory
 import com.example.goespudd.R
-import com.example.goespudd.data.datasource.cart.CartDataSource
-import com.example.goespudd.data.datasource.cart.CartDatabaseDataSource
 import com.example.goespudd.data.model.Menu
-import com.example.goespudd.data.repository.CartRepository
-import com.example.goespudd.data.repository.CartRepositoryImpl
-import com.example.goespudd.data.source.local.database.AppDatabase
 import com.example.goespudd.databinding.ActivityDetailMenuBinding
 import com.example.goespudd.databinding.LayoutBtnOrderMenuBinding
 import com.example.goespudd.databinding.LayoutDetailItemMenuBinding
@@ -22,10 +15,11 @@ import com.example.goespudd.databinding.LayoutDetailLocShopMenuBinding
 import com.example.goespudd.databinding.LayoutDetailOrderMenuBinding
 import com.example.goespudd.utils.proceedWhen
 import com.example.goespudd.utils.toIndonesianFormat
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class DetailMenuActivity : AppCompatActivity() {
-    private val binding : ActivityDetailMenuBinding by lazy {
+    private val binding: ActivityDetailMenuBinding by lazy {
         ActivityDetailMenuBinding.inflate(layoutInflater)
     }
 
@@ -45,13 +39,8 @@ class DetailMenuActivity : AppCompatActivity() {
         LayoutBtnOrderMenuBinding.bind(detailOrderMenu.layoutBtnOrder.root)
     }
 
-    private val viewModel: DetailMenuViewModel by viewModels {
-        val db = AppDatabase.getInstance(this)
-        val ds: CartDataSource = CartDatabaseDataSource(db.cartDao())
-        val rp: CartRepository = CartRepositoryImpl(ds)
-        GenericViewModelFactory.create(
-            DetailMenuViewModel(intent?.extras, rp)
-        )
+    private val viewModel: DetailMenuViewModel by viewModel {
+        parametersOf(intent.extras)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +72,8 @@ class DetailMenuActivity : AppCompatActivity() {
                 doOnSuccess = {
                     Toast.makeText(
                         this,
-                        getString(R.string.text_add_to_cart_success), Toast.LENGTH_SHORT
+                        getString(R.string.text_add_to_cart_success),
+                        Toast.LENGTH_SHORT,
                     ).show()
                     finish()
                 },
@@ -93,7 +83,7 @@ class DetailMenuActivity : AppCompatActivity() {
                 },
                 doOnLoading = {
                     Toast.makeText(this, getString(R.string.loading), Toast.LENGTH_SHORT).show()
-                }
+                },
             )
         }
     }
@@ -113,7 +103,7 @@ class DetailMenuActivity : AppCompatActivity() {
 
     private fun openLocation(urlMaps: String) {
         detailLocShopMenuBinding.tvDetailDescMenu.setOnClickListener {
-            if (detailLocShopMenuBinding.tvDetailDescMenu.text.isNotEmpty()){
+            if (detailLocShopMenuBinding.tvDetailDescMenu.text.isNotEmpty()) {
                 val uri = Uri.parse(urlMaps)
                 intent = Intent(Intent.ACTION_VIEW, uri)
                 intent.setPackage("com.google.android.apps.maps")
@@ -131,6 +121,7 @@ class DetailMenuActivity : AppCompatActivity() {
             detailOrderMenu.tvCount.text = it.toString()
         }
     }
+
     companion object {
         const val EXTRA_MENU = "EXTRA_MENU"
     }

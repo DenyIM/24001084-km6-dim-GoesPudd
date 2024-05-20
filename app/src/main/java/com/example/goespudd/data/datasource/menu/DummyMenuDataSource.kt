@@ -1,6 +1,6 @@
 package com.example.goespudd.data.datasource.menu
 
-//class DummyMenuDataSource: MenuDataSource {
+// class DummyMenuDataSource: MenuDataSource {
 //    override fun getMenu(): MenuResponse {
 //        return MenuResponse(
 //            message = "",
@@ -100,4 +100,4 @@ package com.example.goespudd.data.datasource.menu
 //            )
 //        )
 //    }
-//}
+// }

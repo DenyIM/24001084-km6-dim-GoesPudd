@@ -5,15 +5,15 @@ import com.example.goespudd.data.source.network.model.menu.MenuItemResponse
 
 fun MenuItemResponse?.toMenu() =
     Menu(
-        id = this?.id.orEmpty(),
-        name = this?.name.orEmpty(),
         imgUrl = this?.imgUrl.orEmpty(),
-        desc = this?.desc.orEmpty(),
+        shopLoc = this?.restoAddress.orEmpty(),
+        mapsLoc = "https://maps.app.goo.gl/h4wQKqaBuXzftGK77",
         price = this?.price ?: 0.0,
-        shopLoc = this?.shopLoc.orEmpty(),
-        mapsLoc = this?.mapsLoc.orEmpty(),
-
+        name = this?.name.orEmpty(),
+        desc = this?.detail.orEmpty(),
     )
 
 fun Collection<MenuItemResponse>?.toMenu() =
-    this?.map { it.toMenu() } ?: listOf()
+    this?.map {
+        it.toMenu()
+    } ?: listOf()

@@ -67,5 +67,9 @@
     <string name="text_register_failed">Register Gagal</string>
     <string name="text_login_failed">Login Gagal</string>
     <string name="text_login_success">Login Berhasil</string>
+    <string name="error_checkout">Checkout Error</string>
+    <string name="text_logout_confirmation">Anda ingin Logout?</string>
+    <string name="text_cancel">Tidak</string>
+    <string name="text_confirm">Ya</string>
 
 </resources>

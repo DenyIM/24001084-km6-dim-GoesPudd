@@ -6,15 +6,10 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Window
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.example.goespudd.utils.GenericViewModelFactory
-import com.example.goespudd.data.datasource.cart.CartDataSource
-import com.example.goespudd.data.datasource.cart.CartDatabaseDataSource
-import com.example.goespudd.data.repository.CartRepository
-import com.example.goespudd.data.repository.CartRepositoryImpl
-import com.example.goespudd.data.source.local.database.AppDatabase
+import com.example.goespudd.R
 import com.example.goespudd.databinding.ActivityCheckoutBinding
 import com.example.goespudd.databinding.LayoutAlertDialogCheckoutSuccessBinding
 import com.example.goespudd.presentation.cart.adapter.CartListAdapter
@@ -22,10 +17,9 @@ import com.example.goespudd.presentation.checkout.adapter.PriceListAdapter
 import com.example.goespudd.presentation.main.MainActivity
 import com.example.goespudd.utils.proceedWhen
 import com.example.goespudd.utils.toIndonesianFormat
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckoutActivity : AppCompatActivity() {
-
     private val binding: ActivityCheckoutBinding by lazy {
         ActivityCheckoutBinding.inflate(layoutInflater)
     }
@@ -34,19 +28,13 @@ class CheckoutActivity : AppCompatActivity() {
         LayoutAlertDialogCheckoutSuccessBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: CheckoutViewModel by viewModels {
-        val db = AppDatabase.getInstance(this)
-        val ds: CartDataSource = CartDatabaseDataSource(db.cartDao())
-        val rp: CartRepository = CartRepositoryImpl(ds)
-        GenericViewModelFactory.create(CheckoutViewModel(rp))
-    }
+    private val viewModel: CheckoutViewModel by viewModel()
 
     private val adapter: CartListAdapter by lazy {
         CartListAdapter()
     }
     private val priceItemAdapter: PriceListAdapter by lazy {
         PriceListAdapter {
-
         }
     }
 
@@ -56,15 +44,48 @@ class CheckoutActivity : AppCompatActivity() {
         setupList()
         observeData()
         setClickListeners()
-
     }
 
     private fun setClickListeners() {
         binding.ivBack.setOnClickListener {
             onBackPressed()
         }
-        binding.btnCheckout.setOnClickListener{
-            setDialogSuccess()
+        binding.btnCheckout.setOnClickListener {
+            doCheckout()
+        }
+    }
+
+    private fun doCheckout() {
+        viewModel.checkoutCart().observe(this) {
+            it.proceedWhen(
+                doOnSuccess = {
+                    binding.layoutState.root.isVisible = false
+                    binding.layoutState.pbLoading.isVisible = false
+                    binding.layoutState.tvError.isVisible = false
+                    binding.layoutContent.root.isVisible = true
+                    binding.layoutContent.rvCart.isVisible = true
+                    viewModel.removeCart()
+                    setDialogSuccess()
+                },
+                doOnLoading = {
+                    binding.layoutState.root.isVisible = true
+                    binding.layoutState.pbLoading.isVisible = true
+                    binding.layoutState.tvError.isVisible = false
+                    binding.layoutContent.root.isVisible = false
+                    binding.layoutContent.rvCart.isVisible = false
+                },
+                doOnError = {
+                    binding.layoutState.root.isVisible = true
+                    binding.layoutState.pbLoading.isVisible = false
+                    binding.layoutContent.root.isVisible = false
+                    binding.layoutContent.rvCart.isVisible = false
+                    Toast.makeText(
+                        this,
+                        getString(R.string.error_checkout),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                },
+            )
         }
     }
 
@@ -75,10 +96,12 @@ class CheckoutActivity : AppCompatActivity() {
         dialog.setContentView(dialogBinding.root)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogBinding.btnGotoHome.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            })
-            viewModel.deleteAllCart()
+            startActivity(
+                Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                },
+            )
+            viewModel.removeCart()
             dialog.dismiss()
         }
         dialog.show()

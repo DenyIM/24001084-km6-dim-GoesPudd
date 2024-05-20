@@ -18,7 +18,10 @@
             android:layout_height="300dp"
             tools:src="@tools:sample/avatars"
             android:background="@drawable/bg_border_black"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/tv_detail_name_menu"

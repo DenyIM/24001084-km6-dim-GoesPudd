@@ -1,17 +1,12 @@
 package com.example.goespudd.data.source.network.model.category
 
-
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 @Keep
 data class CategoryItemResponse(
-    @SerializedName("id")
-    val id: String?,
-    @SerializedName("img_url")
+    @SerializedName("image_url")
     val imgUrl: String?,
-    @SerializedName("name")
+    @SerializedName("nama")
     val name: String?,
-    @SerializedName("slug")
-    val slug: String?
 )
