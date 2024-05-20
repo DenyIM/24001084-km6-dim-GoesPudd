@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("kotlin-parcelize")
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -26,7 +27,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -47,16 +48,34 @@ android {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://5e892715-c531-45ac-9582-f12401c4bcf4.mock.pstmn.io/\""
+                value = "\"https://api-restaurant.binaracademy.org/\"",
             )
         }
         create("integration") {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://5e892715-c531-45ac-9582-f12401c4bcf4.mock.pstmn.io/\""
+                value = "\"https://api-restaurant.binaracademy.org/\"",
             )
         }
+    }
+}
+
+tasks.getByPath("preBuild").dependsOn("ktlintFormat")
+
+ktlint {
+    android.set(false)
+    ignoreFailures.set(true)
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+    }
+    kotlinScriptAdditionalPaths {
+        include(fileTree("scripts/"))
+    }
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
     }
 }
 
@@ -76,10 +95,6 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.auth)
     ksp(libs.room.compiler)
-    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
-    implementation("com.google.firebase:firebase-analytics")
-
-
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -96,4 +111,16 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
+
+    implementation(libs.koin.android)
+
+    testImplementation("junit:junit:4.12")
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk.agent)
+    testImplementation(libs.coroutine.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.core.testing)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

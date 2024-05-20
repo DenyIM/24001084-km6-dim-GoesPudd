@@ -10,5 +10,5 @@ data class MenuResponse(
     @SerializedName("message")
     val message: String?,
     @SerializedName("data")
-    val data: List<MenuItemResponse>?
+    val data: List<MenuItemResponse>?,
 )

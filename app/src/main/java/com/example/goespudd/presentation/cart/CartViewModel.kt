@@ -6,11 +6,15 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.goespudd.data.model.Cart
 import com.example.goespudd.data.repository.CartRepository
+import com.example.goespudd.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
+class CartViewModel(
+    private val cartRepository: CartRepository,
+    private val userRepository: UserRepository,
+) : ViewModel() {
     fun getAllCarts() = cartRepository.getUserCartData().asLiveData(Dispatchers.IO)
 
     fun decreaseCart(item: Cart) {
@@ -18,11 +22,13 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
             cartRepository.decreaseCart(item).collect()
         }
     }
+
     fun increaseCart(item: Cart) {
         viewModelScope.launch(Dispatchers.IO) {
             cartRepository.increaseCart(item).collect()
         }
     }
+
     fun removeCart(item: Cart) {
         viewModelScope.launch(Dispatchers.IO) {
             cartRepository.deleteCart(item).collect()
@@ -31,9 +37,11 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
 
     fun setCartNotes(item: Cart) {
         viewModelScope.launch(Dispatchers.IO) {
-            cartRepository.setCartNotes(item).collect{
+            cartRepository.setCartNotes(item).collect {
                 Log.d("Set Notes", "setCartNotes: $it")
             }
         }
     }
+
+    fun isUserLoggedIn() = userRepository.isLoggedIn()
 }

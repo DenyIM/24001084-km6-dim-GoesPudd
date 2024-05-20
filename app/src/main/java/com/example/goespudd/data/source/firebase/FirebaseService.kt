@@ -1,39 +1,68 @@
-package com.catnip.firebaseauthexample.data.source.firebase
+package com.example.goespudd.data.source.firebase
 
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
 import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 
 interface FirebaseService {
     @Throws(exceptionClasses = [Exception::class])
-    suspend fun doLogin(email: String, password: String): Boolean
+    suspend fun doLogin(
+        email: String,
+        password: String,
+    ): Boolean
 
     @Throws(exceptionClasses = [Exception::class])
-    suspend fun doRegister(email: String, fullName: String, password: String): Boolean
+    suspend fun doRegister(
+        email: String,
+        fullName: String,
+        password: String,
+    ): Boolean
 
-    suspend fun updateProfile(fullName: String?): Boolean
+    suspend fun updateProfile(fullName: String? = null): Boolean
+
     suspend fun updatePassword(newPassword: String): Boolean
+
     suspend fun updateEmail(newEmail: String): Boolean
+
     fun requestChangePasswordByEmail(): Boolean
+
     fun doLogout(): Boolean
+
     fun isLoggedIn(): Boolean
+
     fun getCurrentUser(): FirebaseUser?
+
+    companion object {
+        fun getInstance(): FirebaseService {
+            return FirebaseServiceImpl()
+        }
+    }
 }
 
-class FirebaseServiceImpl(): FirebaseService {
+class FirebaseServiceImpl() : FirebaseService {
     private val firebaseAuth = FirebaseAuth.getInstance()
-    override suspend fun doLogin(email: String, password: String): Boolean {
-        val loginResult = firebaseAuth.signInWithEmailAndPassword(email,password).await()
+
+    override suspend fun doLogin(
+        email: String,
+        password: String,
+    ): Boolean {
+        val loginResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
         return loginResult.user != null
     }
 
-    override suspend fun doRegister(email: String, fullName: String, password: String): Boolean {
-        val registerResult = firebaseAuth.signInWithEmailAndPassword(email,password).await()
+    override suspend fun doRegister(
+        email: String,
+        fullName: String,
+        password: String,
+    ): Boolean {
+        val registerResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
         registerResult.user?.updateProfile(
             userProfileChangeRequest {
                 displayName = fullName
-            }
+            },
         )?.await()
         return registerResult.user != null
     }
@@ -41,8 +70,10 @@ class FirebaseServiceImpl(): FirebaseService {
     override suspend fun updateProfile(fullName: String?): Boolean {
         getCurrentUser()?.updateProfile(
             userProfileChangeRequest {
-                fullName?.let { displayName = fullName }
-            }
+                fullName?.let {
+                    displayName = fullName
+                }
+            },
         )?.await()
         return true
     }
@@ -65,7 +96,7 @@ class FirebaseServiceImpl(): FirebaseService {
     }
 
     override fun doLogout(): Boolean {
-        firebaseAuth.signOut()
+        Firebase.auth.signOut()
         return true
     }
 

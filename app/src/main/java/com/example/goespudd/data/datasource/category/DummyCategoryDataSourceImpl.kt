@@ -1,7 +1,6 @@
 package com.example.goespudd.data.datasource.category
 
-
-//class DummyCategoryDataSourceImpl: CategoryDataSource {
+// class DummyCategoryDataSourceImpl: CategoryDataSource {
 //    override fun getCategory(): CategoryResponse {
 //        return CategoryResponse(
 //            status = true,
@@ -59,4 +58,4 @@ package com.example.goespudd.data.datasource.category
 //            message = ""
 //        )
 //    }
-//}
+// }
